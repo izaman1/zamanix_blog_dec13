@@ -1,0 +1,29 @@
+[build]
+builder = "nixpacks"
+buildCommand = "npm install"
+
+[deploy]
+startCommand = "npm start"
+healthcheckPath = "/_health"
+healthcheckTimeout = 100
+restartPolicy = "on-failure"
+numReplicas = 1
+
+[deploy.healthcheck]
+path = "/_health"
+interval = 15
+timeout = 5
+retries = 3
+
+[[services]]
+internal_port = 5000
+protocol = "tcp"
+
+[services.concurrency]
+type = "connections"
+hard_limit = 25
+soft_limit = 20
+
+[[services.ports]]
+handlers = ["http"]
+port = "80"
